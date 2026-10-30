@@ -1,29 +1,143 @@
 
-<?php
-session_start();
 
-// Clear all session data
-$_SESSION = [];
 
-// Remove the session cookie
-if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    setcookie(
-        session_name(),
-        "",
-        time() - 42000,
-        $params["path"],
-        $params["domain"],
-        $params["secure"],
-        $params["httponly"]
-    );
-}
+    <title>Login - Asset Management Fund</title>
 
-// Destroy the session
-session_destroy();
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-// Redirect to login
-header("Location: login.php");
-exit();
-?>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #dbeafe, #e9d5ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        h2 {
+            text-align: center;
+            color: #6d28d9;
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: 2px solid #c4b5fd;
+            border-color: #6d28d9;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 22px;
+            background: #6d28d9;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5b21b6;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .signup-link a {
+            color: #6d28d9;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <h2>Asset Management Fund</h2>
+    <p style="text-align:center">Sign in to your account</p>
+
+    
+    <form method="POST" action="login.php">
+
+        <label for="email">Username</label>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your registered email"
+            value=""
+            autocomplete="username"
+            required
+        >
+
+        <label for="password">Password</label>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+        >
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <p class="signup-link">
+        Don't have an account?
+        <a href="signup.php">Create Account</a>
+    </p>
+
+</div>
+
+</body>
+</html>
