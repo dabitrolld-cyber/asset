@@ -1,0 +1,401 @@
+
+<?php
+require_once "db.php";
+
+$message = "";
+$messageType = "";
+
+$firstname = "";
+$surname = "";
+$contact = "";
+$email = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    $firstname = trim($_POST["firstname"] ?? "");
+    $surname = trim($_POST["surname"] ?? "");
+    $contact = trim($_POST["contact"] ?? "");
+    $email = trim($_POST["email"] ?? "");
+    $password = $_POST["password"] ?? "";
+    $confirm_password = $_POST["confirm_password"] ?? "";
+
+    if (
+        $firstname === "" ||
+        $surname === "" ||
+        $contact === "" ||
+        $email === "" ||
+        $password === "" ||
+        $confirm_password === ""
+    ) {
+        $message = "Please fill in all fields.";
+        $messageType = "error";
+
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message = "Please enter a valid email address.";
+        $messageType = "error";
+
+    } elseif (strlen($password) < 8) {
+        $message = "Password must be at least 8 characters.";
+        $messageType = "error";
+
+    } elseif ($password !== $confirm_password) {
+        $message = "Passwords do not match!";
+        $messageType = "error";
+
+    } else {
+        // Check whether email already exists
+        $check = $conn->prepare(
+            "SELECT id FROM sigup WHERE email = ?"
+        );
+
+        $check->bind_param("s", $email);
+        $check->execute();
+        $check->store_result();
+
+        if ($check->num_rows > 0) {
+            $message = "This email is already registered.";
+            $messageType = "error";
+            $check->close();
+
+        } else {
+            $check->close();
+
+            // Securely hash the password
+            $hashedPassword = password_hash(
+                $password,
+                PASSWORD_DEFAULT
+            );
+
+            // Save user details in the database
+            $stmt = $conn->prepare(
+                "INSERT INTO sigup
+                (firstname, surname, contact, email, password)
+                VALUES (?, ?, ?, ?, ?)"
+            );
+
+            $stmt->bind_param(
+                "sssss",
+                $firstname,
+                $surname,
+                $contact,
+                $email,
+                $hashedPassword
+            );
+
+            if ($stmt->execute()) {
+                $message = "Registration successful!";
+                $messageType = "success";
+
+                $firstname = "";
+                $surname = "";
+                $contact = "";
+                $email = "";
+            } else {
+                $message = "Registration failed. Please try again.";
+                $messageType = "error";
+            }
+
+            $stmt->close();
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #dbeafe, #e9d5ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px 15px;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: #222;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 17px;
+        }
+
+        .input-group > label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .input-group input:not([type="checkbox"]) {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #6d28d9;
+            box-shadow: 0 0 0 2px rgba(109, 40, 217, 0.12);
+        }
+
+        .show-password {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #444;
+        }
+
+        #passwordMessage {
+            font-size: 13px;
+            margin: 8px 0 0;
+            font-weight: bold;
+        }
+
+        .error-message {
+            padding: 11px;
+            border-radius: 7px;
+            margin-bottom: 17px;
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .success-message {
+            padding: 11px;
+            border-radius: 7px;
+            margin-bottom: 17px;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .signup-button {
+            width: 100%;
+            padding: 13px;
+            background: #6d28d9;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .signup-button:hover {
+            background: #5b21b6;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #6d28d9;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 480px) {
+            .signup-container {
+                padding: 22px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="signup-container">
+
+    <h1>Create Account</h1>
+    <p class="subtitle">Please fill in your details to sign up.</p>
+
+    <?php if ($message !== ""): ?>
+        <div class="<?php echo $messageType === 'success'
+            ? 'success-message'
+            : 'error-message'; ?>">
+            <?php echo htmlspecialchars($message); ?>
+        </div>
+    <?php endif; ?>
+
+    <form action="signup.php" method="POST" id="signupForm">
+
+        <div class="input-group">
+            <label for="firstname">First Name</label>
+            <input
+                type="text"
+                id="firstname"
+                name="firstname"
+                placeholder="Enter your first name"
+                value="<?php echo htmlspecialchars($firstname); ?>"
+                required
+            >
+        </div>
+
+        <div class="input-group">
+            <label for="surname">Surname</label>
+            <input
+                type="text"
+                id="surname"
+                name="surname"
+                placeholder="Enter your surname"
+                value="<?php echo htmlspecialchars($surname); ?>"
+                required
+            >
+        </div>
+
+        <div class="input-group">
+            <label for="contact">Contact Number</label>
+            <input
+                type="tel"
+                id="contact"
+                name="contact"
+                placeholder="Enter your contact number"
+                value="<?php echo htmlspecialchars($contact); ?>"
+                required
+            >
+        </div>
+
+        <div class="input-group">
+            <label for="email">Gmail Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email address"
+                value="<?php echo htmlspecialchars($email); ?>"
+                required
+            >
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Create a password"
+                minlength="8"
+                required
+            >
+        </div>
+
+        <div class="input-group">
+            <label for="confirm_password">Confirm Password</label>
+            <input
+                type="password"
+                id="confirm_password"
+                name="confirm_password"
+                placeholder="Re-enter your password"
+                minlength="8"
+                required
+            >
+
+            <p id="passwordMessage" aria-live="polite"></p>
+
+            <label class="show-password">
+                <input type="checkbox" id="showPassword">
+                Show Password
+            </label>
+        </div>
+
+        <button type="submit" class="signup-button">
+            Sign Up
+        </button>
+
+    </form>
+
+    <p class="login-link">
+        Already have an account?
+        <a href="login.php">Sign In</a>
+    </p>
+
+</div>
+
+<script>
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("confirm_password");
+    const passwordMessage = document.getElementById("passwordMessage");
+    const showPassword = document.getElementById("showPassword");
+    const signupForm = document.getElementById("signupForm");
+
+    // Check passwords while the user types
+    function checkPassword() {
+        if (confirmPassword.value === "") {
+            passwordMessage.textContent = "";
+            confirmPassword.setCustomValidity("");
+            return;
+        }
+
+        if (password.value === confirmPassword.value) {
+            passwordMessage.textContent = "Passwords match!";
+            passwordMessage.style.color = "green";
+            confirmPassword.setCustomValidity("");
+        } else {
+            passwordMessage.textContent = "Passwords do not match!";
+            passwordMessage.style.color = "red";
+            confirmPassword.setCustomValidity("Passwords do not match!");
+        }
+    }
+
+    password.addEventListener("input", checkPassword);
+    confirmPassword.addEventListener("input", checkPassword);
+
+    // Show or hide both password fields
+    showPassword.addEventListener("change", function () {
+        const inputType = this.checked ? "text" : "password";
+
+        password.type = inputType;
+        confirmPassword.type = inputType;
+    });
+
+    // Check passwords again before submitting
+    signupForm.addEventListener("submit", function (event) {
+        checkPassword();
+
+        if (password.value !== confirmPassword.value) {
+            event.preventDefault();
+            confirmPassword.reportValidity();
+        }
+    });
+</script>
+
+</body>
+</html>
