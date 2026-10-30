@@ -1,105 +1,5 @@
 
-<?php
-require_once "db.php";
 
-$message = "";
-$messageType = "";
-
-$firstname = "";
-$surname = "";
-$contact = "";
-$email = "";
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-    $firstname = trim($_POST["firstname"] ?? "");
-    $surname = trim($_POST["surname"] ?? "");
-    $contact = trim($_POST["contact"] ?? "");
-    $email = trim($_POST["email"] ?? "");
-    $password = $_POST["password"] ?? "";
-    $confirm_password = $_POST["confirm_password"] ?? "";
-
-    if (
-        $firstname === "" ||
-        $surname === "" ||
-        $contact === "" ||
-        $email === "" ||
-        $password === "" ||
-        $confirm_password === ""
-    ) {
-        $message = "Please fill in all fields.";
-        $messageType = "error";
-
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $message = "Please enter a valid email address.";
-        $messageType = "error";
-
-    } elseif (strlen($password) < 8) {
-        $message = "Password must be at least 8 characters.";
-        $messageType = "error";
-
-    } elseif ($password !== $confirm_password) {
-        $message = "Passwords do not match!";
-        $messageType = "error";
-
-    } else {
-        // Check whether email already exists
-        $check = $conn->prepare(
-            "SELECT id FROM sigup WHERE email = ?"
-        );
-
-        $check->bind_param("s", $email);
-        $check->execute();
-        $check->store_result();
-
-        if ($check->num_rows > 0) {
-            $message = "This email is already registered.";
-            $messageType = "error";
-            $check->close();
-
-        } else {
-            $check->close();
-
-            // Securely hash the password
-            $hashedPassword = password_hash(
-                $password,
-                PASSWORD_DEFAULT
-            );
-
-            // Save user details in the database
-            $stmt = $conn->prepare(
-                "INSERT INTO sigup
-                (firstname, surname, contact, email, password)
-                VALUES (?, ?, ?, ?, ?)"
-            );
-
-            $stmt->bind_param(
-                "sssss",
-                $firstname,
-                $surname,
-                $contact,
-                $email,
-                $hashedPassword
-            );
-
-            if ($stmt->execute()) {
-                $message = "Registration successful!";
-                $messageType = "success";
-
-                $firstname = "";
-                $surname = "";
-                $contact = "";
-                $email = "";
-            } else {
-                $message = "Registration failed. Please try again.";
-                $messageType = "error";
-            }
-
-            $stmt->close();
-        }
-    }
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -247,14 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <h1>Create Account</h1>
     <p class="subtitle">Please fill in your details to sign up.</p>
 
-    <?php if ($message !== ""): ?>
-        <div class="<?php echo $messageType === 'success'
-            ? 'success-message'
-            : 'error-message'; ?>">
-            <?php echo htmlspecialchars($message); ?>
-        </div>
-    <?php endif; ?>
-
+    
     <form action="signup.php" method="POST" id="signupForm">
 
         <div class="input-group">
@@ -264,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 id="firstname"
                 name="firstname"
                 placeholder="Enter your first name"
-                value="<?php echo htmlspecialchars($firstname); ?>"
+                value=""
                 required
             >
         </div>
@@ -276,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 id="surname"
                 name="surname"
                 placeholder="Enter your surname"
-                value="<?php echo htmlspecialchars($surname); ?>"
+                value=""
                 required
             >
         </div>
@@ -288,7 +181,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 id="contact"
                 name="contact"
                 placeholder="Enter your contact number"
-                value="<?php echo htmlspecialchars($contact); ?>"
+                value=""
                 required
             >
         </div>
@@ -300,7 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 id="email"
                 name="email"
                 placeholder="Enter your email address"
-                value="<?php echo htmlspecialchars($email); ?>"
+                value=""
                 required
             >
         </div>
