@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login - Asset Management Fund</title>
+    <title>Asset Management Fund</title>
 
     <style>
         * {
@@ -15,129 +15,400 @@
         }
 
         body {
-            margin: 0;
-            min-height: 100vh;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #dbeafe, #e9d5ff);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            margin: 0;
+            background-color: white;
         }
 
-        .login-box {
-            background: white;
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-            border-radius: 14px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        }
-
-        h2 {
-            text-align: center;
-            color: #6d28d9;
-            margin-top: 0;
-        }
-
-        label {
-            display: block;
-            margin: 15px 0 7px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 7px;
-            font-size: 15px;
-        }
-
-        input:focus {
-            outline: 2px solid #c4b5fd;
-            border-color: #6d28d9;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 22px;
-            background: #6d28d9;
+        header {
+            background-color: #007bff;
             color: white;
-            border: none;
-            border-radius: 7px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #5b21b6;
-        }
-
-        .error {
-            background: #fee2e2;
-            color: #b91c1c;
-            padding: 12px;
-            border-radius: 7px;
-            margin-bottom: 15px;
-        }
-
-        .signup-link {
             text-align: center;
-            margin-top: 20px;
+            padding: 2px;
         }
 
-        .signup-link a {
-            color: #6d28d9;
+        nav {
+            background-color: #333;
+            padding: 5px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 15px;
+            text-decoration: underline;
+        }
+
+        .content {
+            text-align: center;
+            padding: 15px 20px;
+        }
+
+        .content h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .members-container {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 10px;
+            max-width: 1500px;
+            margin: auto;
+			align-items: center;
+        }
+
+        .member-card {
+            padding: 10px;
+            background-color: white;
+            border: 2px solid #ddd;
+        }
+
+        .member-card img {
+            display: block;
+            width: 100%;
+            max-width: 115px;
+            height: auto;
+            object-fit: contain;
+            border-radius: 0;
+            border: none;
+            margin: 0 auto;
+        }
+
+        .member-card h3 {
+            font-size: 15px;
+            margin: 12px 0;
+            color: #222;
+        }
+
+        .details-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 7px 10px;
             text-decoration: none;
-            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .details-btn:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .members-container {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 450px) {
+            .members-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="login-box">
+<header>
+    <h1>Asset Management Fund</h1>
+    <p>
+    Welcome,
+    Admin!
+</p>
+</header>
 
-    <h2>Asset Management Fund</h2>
-    <p style="text-align:center">Sign in to your account</p>
+<nav>
+    <a href="index.php">Home</a>
+    <a href="about.php">About</a>
+    <a href="report/10.jpeg">Monthly Report</a>
+	<a href="logout.php">Logout</a>
+</nav>
 
-    
-    <form method="POST" action="login.php">
+<div class="content">
 
-        <label for="email">Username</label>
-        <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Enter your registered email"
-            value=""
-            autocomplete="username"
-            required
-        >
+    <h2>Asset Management Fund Members</h2>
 
-        <label for="password">Password</label>
-        <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter your password"
-            autocomplete="current-password"
-            required
-        >
+    <div class="members-container">
 
-        <button type="submit">Login</button>
+        
+            <div class="member-card">
 
-    </form>
+                <img
+                    src="mphoto/chairman.jpeg"
+                    alt="Chairman- Prachanda subedi"
+                >
 
-    <p class="signup-link">
-        Don't have an account?
-        <a href="signup.php">Create Account</a>
-    </p>
+                <h3>
+                    Chairman- Prachanda subedi                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=1"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/2.jpeg"
+                    alt="Vice Chairman- Ranjit"
+                >
+
+                <h3>
+                    Vice Chairman- Ranjit                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=2"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/3.jpeg"
+                    alt="Secretary- Suman Thami"
+                >
+
+                <h3>
+                    Secretary- Suman Thami                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=3"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/4.jpeg"
+                    alt="Member"
+                >
+
+                <h3>
+                    Member                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=4"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/5.jpeg"
+                    alt="Member"
+                >
+
+                <h3>
+                    Member                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=5"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/6.jpeg"
+                    alt="Member"
+                >
+
+                <h3>
+                    Member                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=6"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/7.jpeg"
+                    alt="Member"
+                >
+
+                <h3>
+                    Member                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=7"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/8.jpeg"
+                    alt="Member"
+                >
+
+                <h3>
+                    Member                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=8"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/9.jpeg"
+                    alt="Member"
+                >
+
+                <h3>
+                    Member                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=9"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/10.jpeg"
+                    alt="Member"
+                >
+
+                <h3>
+                    Member                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=10"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/11.jpeg"
+                    alt="Member- Rc Subedi"
+                >
+
+                <h3>
+                    Member- Rc Subedi                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=11"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/12.jpeg"
+                    alt="Member- Sushant Dahal"
+                >
+
+                <h3>
+                    Member- Sushant Dahal                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=12"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+            <div class="member-card">
+
+                <img
+                    src="mphoto/13.jpeg"
+                    alt="Member- Shanta Prasad Subedi"
+                >
+
+                <h3>
+                    Member- Shanta Prasad Subedi                </h3>
+
+                <a
+                    class="details-btn"
+                    href="member-details.php?id=13"
+                >
+                    View Full Details
+                </a>
+
+            </div>
+
+        
+    </div>
 
 </div>
+
+<footer>
+    <p><strong>Contact Us</strong></p>
+    <p>Email: assetmg201@gmail.com</p>
+    <p>Phone Number: 015001152</p>
+</footer>
 
 </body>
 </html>
