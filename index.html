@@ -1,91 +1,5 @@
 
-<?php
-session_start();
 
-// Allow only authenticated users
-if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
-    exit();
-}
-
-$websiteName = "Asset Management Fund";
-
-$loggedInUser = $_SESSION["firstname"] ?? "User";
-
-// Keep your existing $members array here.
-?>
-
-<?php
-$websiteName = "Asset Management Fund";
-
-$members = [
-    [
-        "id" => 1,
-        "name" => "Chairman- Prachanda subedi",
-        "photo" => "mphoto/chairman.jpeg"
-    ],
-    [
-        "id" => 2,
-        "name" => "Vice Chairman- Ranjit",
-        "photo" => "mphoto/2.jpeg"
-    ],
-    [
-        "id" => 3,
-        "name" => "Secretary- Suman Thami",
-        "photo" => "mphoto/3.jpeg"
-    ],
-    [
-        "id" => 4,
-        "name" => "Member",
-        "photo" => "mphoto/4.jpeg"
-    ],
-    [
-        "id" => 5,
-        "name" => "Member",
-        "photo" => "mphoto/5.jpeg"
-    ],
-    [
-        "id" => 6,
-        "name" => "Member",
-        "photo" => "mphoto/6.jpeg"
-    ],
-	[
-        "id" => 7,
-        "name" => "Member",
-        "photo" => "mphoto/7.jpeg"
-    ],
-	[
-        "id" => 8,
-        "name" => "Member",
-        "photo" => "mphoto/8.jpeg"
-    ],
-	[
-        "id" => 9,
-        "name" => "Member",
-        "photo" => "mphoto/9.jpeg"
-    ],
-	[
-        "id" => 10,
-        "name" => "Member",
-        "photo" => "mphoto/10.jpeg"
-    ],
-	[
-        "id" => 11,
-        "name" => "Member- Rc Subedi",
-        "photo" => "mphoto/11.jpeg"
-    ],
-	[
-        "id" => 12,
-        "name" => "Member- Sushant Dahal",
-        "photo" => "mphoto/12.jpeg"
-    ],
-	[
-        "id" => 13,
-        "name" => "Member- Shanta Prasad Subedi",
-        "photo" => "mphoto/13.jpeg"
-    ]
-];
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -93,7 +7,7 @@ $members = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Asset Management Fund</title>
+    <title>Login - Asset Management Fund</title>
 
     <style>
         * {
@@ -101,163 +15,129 @@ $members = [
         }
 
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            background-color: white;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #dbeafe, #e9d5ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
-        header {
-            background-color: #007bff;
-            color: white;
-            text-align: center;
-            padding: 2px;
-        }
-
-        nav {
-            background-color: #333;
-            padding: 5px;
-            text-align: center;
-        }
-
-        nav a {
-            color: white;
-            margin: 15px;
-            text-decoration: underline;
-        }
-
-        .content {
-            text-align: center;
-            padding: 15px 20px;
-        }
-
-        .content h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-
-        .members-container {
-            display: grid;
-            grid-template-columns: repeat(7, minmax(0, 1fr));
-            gap: 10px;
-            max-width: 1500px;
-            margin: auto;
-			align-items: center;
-        }
-
-        .member-card {
-            padding: 10px;
-            background-color: white;
-            border: 2px solid #ddd;
-        }
-
-        .member-card img {
-            display: block;
+        .login-box {
+            background: white;
+            padding: 30px;
             width: 100%;
-            max-width: 115px;
-            height: auto;
-            object-fit: contain;
-            border-radius: 0;
-            border: none;
-            margin: 0 auto;
+            max-width: 400px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
         }
 
-        .member-card h3 {
-            font-size: 15px;
-            margin: 12px 0;
-            color: #222;
-        }
-
-        .details-btn {
-            display: inline-block;
-            background-color: #007bff;
-            color: white;
-            padding: 7px 10px;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-
-        .details-btn:hover {
-            background-color: #0056b3;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
+        h2 {
             text-align: center;
-            padding: 1px;
-            margin-top: 10px;
+            color: #6d28d9;
+            margin-top: 0;
         }
 
-        @media (max-width: 600px) {
-            .members-container {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
+        label {
+            display: block;
+            margin: 15px 0 7px;
+            font-weight: bold;
         }
 
-        @media (max-width: 450px) {
-            .members-container {
-                grid-template-columns: 1fr;
-            }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: 2px solid #c4b5fd;
+            border-color: #6d28d9;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 22px;
+            background: #6d28d9;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5b21b6;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .signup-link a {
+            color: #6d28d9;
+            text-decoration: none;
+            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
 
-<header>
-    <h1><?php echo $websiteName; ?></h1>
-    <p>
-    Welcome,
-    <?php echo htmlspecialchars($loggedInUser); ?>!
-</p>
-</header>
+<div class="login-box">
 
-<nav>
-    <a href="index.php">Home</a>
-    <a href="about.php">About</a>
-    <a href="report/10.jpeg">Monthly Report</a>
-	<a href="logout.php">Logout</a>
-</nav>
+    <h2>Asset Management Fund</h2>
+    <p style="text-align:center">Sign in to your account</p>
 
-<div class="content">
+    
+    <form method="POST" action="login.php">
 
-    <h2>Asset Management Fund Members</h2>
+        <label for="email">Username</label>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your registered email"
+            value=""
+            autocomplete="username"
+            required
+        >
 
-    <div class="members-container">
+        <label for="password">Password</label>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+        >
 
-        <?php foreach ($members as $member) { ?>
+        <button type="submit">Login</button>
 
-            <div class="member-card">
+    </form>
 
-                <img
-                    src="<?php echo htmlspecialchars($member['photo']); ?>"
-                    alt="<?php echo htmlspecialchars($member['name']); ?>"
-                >
-
-                <h3>
-                    <?php echo htmlspecialchars($member['name']); ?>
-                </h3>
-
-                <a
-                    class="details-btn"
-                    href="member-details.php?id=<?php echo $member['id']; ?>"
-                >
-                    View Full Details
-                </a>
-
-            </div>
-
-        <?php } ?>
-
-    </div>
+    <p class="signup-link">
+        Don't have an account?
+        <a href="signup.php">Create Account</a>
+    </p>
 
 </div>
-
-<footer>
-    <p><strong>Contact Us</strong></p>
-    <p>Email: assetmg201@gmail.com</p>
-    <p>Phone Number: 015001152</p>
-</footer>
 
 </body>
 </html>
